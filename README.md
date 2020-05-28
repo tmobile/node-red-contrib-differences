@@ -20,6 +20,22 @@ Simple array:
 }
 ```
 
+Object:
+
+```javascript
+// msg.currentInventory
+{ widgets: 1, gadgets: 2, whatchamacallits: 2 }
+
+// msg.newInventory
+{ gadgets: 2, gizmos: 3, thingamabobs: 4, whatchamacallits: 3 }
+
+// Output:
+{
+  added: { gizmos: 3, thingamabobs: 4, whatchamacallits: 3 }
+  removed: { widgets: 1, whatchamacallits: 2 }
+}
+```
+
 Array of objects:
 
 ```javascript
