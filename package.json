@@ -1,0 +1,46 @@
+{
+  "name": "@tmobile/node-red-contrib-array-differ",
+  "version": "0.0.0",
+  "description": "Given two array inputs, when this node is executed it will output the differences between the two arrays",
+  "main": "dist/index.js",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "prepack": "tsc && copyfiles ./src/**/*.html dist/ --up=1",
+    "build": "npm run prepack",
+    "build:ci": "npm pack --unsafe-perm",
+    "test": "mocha -r ts-node/register \"**/*.spec.ts\"",
+    "start": "ts-node src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tmobile/node-red-contrib-msg-diff"
+  },
+  "keywords": [
+    "Node-RED",
+    "Array Differences",
+    "IoT",
+    "Internet of Things"
+  ],
+  "author": "T-Mobile",
+  "license": "Apache-2.0",
+  "node-red": {
+    "nodes": {
+      "array-diff": "dist/array-differ.js"
+    }
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.13.0",
+    "@types/node-red": "^0.20.1",
+    "chai": "^4.2.0",
+    "copyfiles": "^2.2.0",
+    "mocha": "^7.1.1",
+    "node-red": "^1.0.5",
+    "node-red-node-test-helper": "^0.2.3",
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
+  }
+}
