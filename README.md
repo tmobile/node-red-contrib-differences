@@ -17,7 +17,6 @@ Simple array:
 {
   added: [ "gizmos", "thingamabobs" ]
   removed: [ "widgets" ]
-  changed: []
 }
 ```
 
