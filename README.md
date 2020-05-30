@@ -1,4 +1,4 @@
-# node-red-contrib-array-differ
+# node-red-contrib-differences
 
 This Node-RED node will compare two input arrays, then output the differences.
 

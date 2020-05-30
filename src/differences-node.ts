@@ -13,8 +13,8 @@ its contributors may be used to endorse or promote products derived from this so
 
 import { Red, Node, NodeProperties } from "node-red";
 
-export default function arrayDiffer(RED: Red) {
-  function ArrayDifferNode(config: NodeProperties & { [key: string]: any }) {
+export default function differencesNode(RED: Red) {
+  function DifferencesNode(config: NodeProperties & { [key: string]: any }) {
     RED.nodes.createNode(this, config);
     const node = this as Node;
     node.on("input", function () {
@@ -22,7 +22,7 @@ export default function arrayDiffer(RED: Red) {
     });
   }
 
-  RED.nodes.registerType("array-differ", ArrayDifferNode);
+  RED.nodes.registerType("differences", DifferencesNode);
 }
 
-module.exports = arrayDiffer;
+module.exports = differencesNode;

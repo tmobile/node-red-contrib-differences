@@ -1,5 +1,5 @@
 {
-  "name": "@tmobile/node-red-contrib-array-differ",
+  "name": "@tmobile/node-red-contrib-differences",
   "version": "0.0.0",
   "description": "Given two array inputs, when this node is executed it will output the differences between the two arrays",
   "main": "dist/index.js",
@@ -27,7 +27,7 @@
   "license": "Apache-2.0",
   "node-red": {
     "nodes": {
-      "array-diff": "dist/array-differ.js"
+      "array-diff": "dist/differences-node.js"
     }
   },
   "devDependencies": {

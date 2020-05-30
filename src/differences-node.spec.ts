@@ -11,13 +11,13 @@ its contributors may be used to endorse or promote products derived from this so
 ================================
 */
 
-import arrayDiffer from "./array-differ";
+import differencesNode from "./differences-node";
 import helper from "node-red-node-test-helper";
 import { expect } from "chai";
 
 helper.init(require.resolve("node-red"));
 
-describe("array-differ Node", function () {
+describe("differences Node", function () {
   // beforeEach(function (done) {
   //   helper.startServer(done);
   // });
@@ -29,8 +29,8 @@ describe("array-differ Node", function () {
   });
 
   it("should be loaded", function (done) {
-    const flow = [{ id: "n1", type: "array-differ", name: "test name" }];
-    helper.load(arrayDiffer, flow, function () {
+    const flow = [{ id: "n1", type: "differences", name: "test name" }];
+    helper.load(differencesNode, flow, function () {
       const n1 = helper.getNode("n1");
       expect(n1.name).to.equal("test name");
       done();
