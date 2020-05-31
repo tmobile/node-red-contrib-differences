@@ -16,9 +16,37 @@ import { Red, Node, NodeProperties } from "node-red";
 export default function differencesNode(RED: Red) {
   function DifferencesNode(config: NodeProperties & { [key: string]: any }) {
     RED.nodes.createNode(this, config);
+
     const node = this as Node;
-    node.on("input", function () {
-      // TODO: Diff the arrays
+    // const context = this.context();
+
+    this.leftInput = config.leftInput || "payload";
+    this.leftInputType = config.leftInputType || "msg";
+
+    this.rightInput = config.rightInput || "payload";
+    this.rightInputType = config.rightInputType || "msg";
+
+    console.log("DifferencesNode, constructor", config);
+
+    node.on("input", function (msg, send) {
+      const leftInputValue = RED.util.evaluateNodeProperty(
+        this.leftInput, // "payload", "widgets", "gadgets", etc.
+        this.leftInputType, // "msg", "flow", "global"
+        node,
+        msg
+      );
+
+      const rightInputValue = RED.util.evaluateNodeProperty(
+        this.rightInput, // "payload", "widgets", "gadgets", etc.
+        this.rightInputType, // "msg", "flow", "global"
+        node,
+        msg
+      );
+
+      console.log("Left Input!", leftInputValue);
+      console.log("Right Input!", rightInputValue);
+
+      send(msg);
     });
   }
 
@@ -26,3 +54,8 @@ export default function differencesNode(RED: Red) {
 }
 
 module.exports = differencesNode;
+
+// Differences Node Input:
+//  Left Input: [list | object]
+//  Right Input: [list | object]
+//  Output Type: [ Union | Intersection | Left-Complement | Right-Complement ]

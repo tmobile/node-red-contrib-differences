@@ -142,8 +142,3 @@ describe("The diff module", () => {
     });
   });
 });
-
-// Differences Node Input:
-//  Left Input: [list | object]
-//  Right Input: [list | object]y
-//  Output Type: [ Union | Intersection | Left-Complement | Right-Complement ]
