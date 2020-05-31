@@ -3,6 +3,10 @@
  */
 type AnyPropertyTuple = [string, any];
 
+interface AnyObject {
+  [key: string]: any;
+}
+
 /**
  * Returns the list of of items the `desired` array contains that is NOT in the `owned` array. Equality determined by value-based
  * (not object/reference based) comparisons.
@@ -14,8 +18,8 @@ type AnyPropertyTuple = [string, any];
  * @returns {T[]} - Items in `desired` but not in `owned`
  */
 export function complement<T>(desired: T, owned: T): Partial<T> {
-  function complementOfArrays(desired: any[], owned: any[]): T {
-    const ownCache = owned.map((own: any) => JSON.stringify(own));
+  function complementOfArrays(desired: any[], owned: any[]): Partial<T> {
+    const ownCache = owned.map((own) => JSON.stringify(own));
     return (desired.filter((desire) => {
       const ownIndex = ownCache.findIndex(
         (own) => own === JSON.stringify(desire)
@@ -27,19 +31,16 @@ export function complement<T>(desired: T, owned: T): Partial<T> {
   function complementOfTuples(
     desired: AnyPropertyTuple[],
     owned: AnyPropertyTuple[]
-  ): T {
-    const ownCache = owned.map((own: any) => JSON.stringify(own));
-    const result: any = {};
-    for (const desire of desired) {
+  ): Partial<T> {
+    const ownCache = owned.map((own) => JSON.stringify(own));
+    return desired.reduce((prev: AnyObject, desire) => {
       const ownIndex = ownCache.findIndex(
         (own) => own === JSON.stringify(desire)
       );
-      if (ownIndex === -1) {
-        ownCache.splice(ownIndex, 1);
-        result[desire[0]] = desire[1];
-      }
-    }
-    return result;
+      if (ownIndex === -1) prev[desire[0]] = desire[1];
+      else ownCache.splice(ownIndex, 1);
+      return prev;
+    }, {}) as T;
   }
 
   return Array.isArray(desired) && Array.isArray(owned)
@@ -111,7 +112,7 @@ export function union(left: any, right: any) {
 
       const ua = unionOfArrays(propA, propB);
 
-      let filtered = false; 
+      let filtered = false;
       const valueU = ua.filter((prop) => {
         const isPropKey = prop === key;
         const result = filtered || !isPropKey;
@@ -122,19 +123,24 @@ export function union(left: any, right: any) {
 
       result[key] =
         Array.isArray(valueA) && Array.isArray(valueB)
-          // Union the property value arrays if both values are arrays
-          ? unionOfArrays(valueA, valueB)
+          ? // Union the property value arrays if both values are arrays
+            unionOfArrays(valueA, valueB)
           : Array.isArray(valueA) || Array.isArray(valueB)
-          // Preserve array values as array type if either is array
-          ? valueU
+          ? // Preserve array values as array type if either is array
+            valueU
           : valueU.length === 1
-          // Preserve scalar values as scalar type
-          ? valueU[0]
-          // Combine multiple scalar values into array
-          : valueU;
+          ? // Preserve scalar values as scalar type
+            valueU[0]
+          : // Combine multiple scalar values into array
+            valueU;
     });
 
     return result;
+  }
+
+  function unionOfScalars(left: any, right: any){
+    const result = unionOfArrays([left], [right]);
+    return result.length === 1 ? result[0] : result;
   }
 
   return Array.isArray(left) && Array.isArray(right)
@@ -144,5 +150,5 @@ export function union(left: any, right: any) {
         Object.entries(left) as AnyPropertyTuple,
         Object.entries(right) as AnyPropertyTuple
       )
-    : unionOfArrays([left], [right]);
+    : unionOfScalars(left, right);
 }
