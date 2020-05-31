@@ -1,5 +1,11 @@
 /**
- * Returns the list of of items the `desired` array contains that is NOT in the `owned` array.
+ * A tuple that can represent any javascript object property
+ */
+type AnyPropertyTuple = [string, any];
+
+/**
+ * Returns the list of of items the `desired` array contains that is NOT in the `owned` array. Equality determined by value-based
+ * (not object/reference based) comparisons.
  *
  * @export
  * @template T
@@ -8,7 +14,7 @@
  * @returns {T[]} - Items in `desired` but not in `owned`
  */
 export function complement<T>(desired: T, owned: T): Partial<T> {
-  function complementArray(desired: any[], owned: any[]): T {
+  function complementOfArrays(desired: any[], owned: any[]): T {
     const ownCache = owned.map((own: any) => JSON.stringify(own));
     return (desired.filter((desire) => {
       const ownIndex = ownCache.findIndex(
@@ -18,9 +24,9 @@ export function complement<T>(desired: T, owned: T): Partial<T> {
     }) as unknown) as T;
   }
 
-  function complementTuple(
-    desired: [string, any][],
-    owned: [string, any][]
+  function complementOfTuples(
+    desired: AnyPropertyTuple[],
+    owned: AnyPropertyTuple[]
   ): T {
     const ownCache = owned.map((own: any) => JSON.stringify(own));
     const result: any = {};
@@ -37,104 +43,106 @@ export function complement<T>(desired: T, owned: T): Partial<T> {
   }
 
   return Array.isArray(desired) && Array.isArray(owned)
-    ? complementArray(desired, owned)
+    ? complementOfArrays(desired, owned)
     : desired === Object(desired) && owned === Object(owned)
-    ? complementTuple(
-        Object.entries(desired) as [string, any],
-        Object.entries(owned) as [string, any]
+    ? complementOfTuples(
+        Object.entries(desired) as AnyPropertyTuple,
+        Object.entries(owned) as AnyPropertyTuple
       )
-    : complementArray([desired], [owned]);
+    : complementOfArrays([desired], [owned]);
 }
 
+/**
+ * Returns all the elements contained in either (or both) sets. Equality determined by value-based
+ * (not object/reference based) comparisons.
+ *
+ * @export
+ * @param {*} left - An object or array
+ * @param {*} right - An object or array
+ * @returns Items or properties contained in either (or both) sets
+ */
 export function union(left: any, right: any) {
   function counts(list: any[]) {
     const result: { [key: string]: number } = {};
     for (const item of list) {
-      const key = JSON.stringify(item);
+      const key = JSON.stringify(item); // Use JSON as a hack for value-based comparison
       result[key] = result[key] ? result[key] + 1 : 1;
     }
     return result;
   }
 
-  function unionArray(listA: any[], listB: any[]) {
-    console.log("*** unionArray ***", { listA, listB });
-    const countsA = counts(listA);
-    const countsB = counts(listB);
-    const keys = new Set([...Object.keys(countsA), ...Object.keys(countsB)]);
-
-    console.log("a - countsA", countsA);
-    console.log("a - countsB", countsB);
-    console.log("a - keys", keys);
+  function unionOfArrays(left: any[], right: any[]) {
+    const leftCounts = counts(left);
+    const rightCounts = counts(right);
+    const keys = new Set([
+      ...Object.keys(leftCounts),
+      ...Object.keys(rightCounts),
+    ]);
 
     const result: any[] = [];
-
     keys.forEach((key) => {
       const value = JSON.parse(key);
-      if ((countsA[key] || 0) > (countsB[key] || 0)) {
-        for (let i = 0; i < countsA[key]; i++) {
+      if ((leftCounts[key] || 0) > (rightCounts[key] || 0)) {
+        // Left contains more equivalent values than right, therefore left contains the union
+        for (let i = 0; i < leftCounts[key]; i++) {
           result.push(value);
         }
       } else {
-        for (let i = 0; i < countsB[key]; i++) {
+        // Right contains same or more equivalent values from left, therefore right contains the union
+        for (let i = 0; i < rightCounts[key]; i++) {
           result.push(value);
         }
       }
     });
 
-    console.log("a - result", result);
-
     return result;
   }
 
-  function unionTuple(listA: [string, any][], listB: [string, any][]) {
-    console.log("*** unionTuple ***", { listA, listB });
-    const keys = new Set([
-      ...listA.map((a) => a[0]),
-      ...listB.map((b) => b[0]),
-    ]);
-
-    console.log("t - keys", keys);
+  function unionOfTuples(left: AnyPropertyTuple[], right: AnyPropertyTuple[]) {
+    const keys = new Set([...left.map((a) => a[0]), ...right.map((b) => b[0])]);
 
     const result: any = {};
-
     keys.forEach((key) => {
-      const propA = listA.find((a) => a[0] === key) || [];
-      const propB = listB.find((b) => b[0] === key) || [];
+      const propA = left.find((a) => a[0] === key) || [];
+      const propB = right.find((b) => b[0] === key) || [];
+
       const [, valueA] = propA;
       const [, valueB] = propB;
-      const ua = unionArray(propA, propB);
-      let filtered = false;
+
+      const ua = unionOfArrays(propA, propB);
+
+      let filtered = false; 
       const valueU = ua.filter((prop) => {
         const isPropKey = prop === key;
         const result = filtered || !isPropKey;
+        // Value could contain key, e.g [x, "x"], so only filter on first encounter
         filtered = filtered || isPropKey;
         return result;
       });
-      
 
       result[key] =
         Array.isArray(valueA) && Array.isArray(valueB)
-          ? unionArray(valueA, valueB)
+          // Union the property value arrays if both values are arrays
+          ? unionOfArrays(valueA, valueB)
           : Array.isArray(valueA) || Array.isArray(valueB)
+          // Preserve array values as array type if either is array
           ? valueU
           : valueU.length === 1
+          // Preserve scalar values as scalar type
           ? valueU[0]
+          // Combine multiple scalar values into array
           : valueU;
-      console.log("t - valueU", valueU);
-      console.log("t - a", propA);
-      console.log("t - b", propB);
-      console.log(`t - result[${key}]`, result[key]);
     });
 
     return result;
   }
 
   return Array.isArray(left) && Array.isArray(right)
-    ? unionArray(left, right)
+    ? unionOfArrays(left, right)
     : left === Object(left) && right === Object(right)
-    ? unionTuple(
-        Object.entries(left) as [string, any],
-        Object.entries(right) as [string, any]
+    ? unionOfTuples(
+        Object.entries(left) as AnyPropertyTuple,
+        Object.entries(right) as AnyPropertyTuple
       )
-    : unionArray([left], [right]);
+    : unionOfArrays([left], [right]);
 }
