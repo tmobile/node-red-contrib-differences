@@ -1,4 +1,4 @@
-import { complement, union } from "./diff";
+import { complement, union, intersection } from "./diff";
 import { expect } from "chai";
 
 describe("The diff module", () => {
@@ -9,6 +9,7 @@ describe("The diff module", () => {
 
       describe("When complement() is called, it...", () => {
         const complementResult = complement(left, right);
+
         it("Returns the set of 'missing' values (the complement)", () => {
           expect(complementResult).to.deep.equal([
             "b",
@@ -19,9 +20,18 @@ describe("The diff module", () => {
         });
       });
 
+      describe("When intersection() is called, it...", () => {
+        const intersectionResult = intersection(left, right);
+
+        it("Returns the set of equivalent values that are in both arrays", () => {
+          expect(intersectionResult).to.deep.equal(["a", "b", 4, [1, 2, 3]]);
+        });
+      });
+
       describe("When union() is called, it...", () => {
         const unionResult = union(left, right);
-        it("Combines the arrays based on equivalence", () => {
+
+        it("Returns the combines set of distinct equivelent values from both arrays", () => {
           expect(unionResult).to.deep.equal([
             4,
             "a",
@@ -43,19 +53,29 @@ describe("The diff module", () => {
 
       describe("When complement() is called, it...", () => {
         const complementResult = complement(left, right);
+
         it("Returns the set of 'missing' values (the complement)", () => {
           expect(complementResult).to.deep.equal({ b: 2, c: ["c", "c", "c"] });
         });
       });
 
+      describe("When intersection() is called, it...", () => {
+        const intersectionResult = intersection(left, right);
+
+        it("Returns the set of equivalent values that are in both arrays", () => {
+          expect(intersectionResult).to.deep.equal({ a: 1, num: 4 });
+        });
+      });
+
       describe("When union() is called", () => {
         const unionResult = union(left, right);
-        it("Combines the arrays", () => {
+
+        it("Returns the combines set of distinct equivelent values from both arrays", () => {
           expect(unionResult).to.deep.equal({
             a: 1,
             b: [2, 1],
             c: ["c", "c", "c"],
-            num: 4
+            num: 4,
           });
         });
       });
@@ -68,13 +88,22 @@ describe("The diff module", () => {
       describe("When complement() is called", () => {
         const complementResult = complement(left, right);
 
-        it("Returns the 'desired' value", () => {
+        it("Returns the 'left' (desired) value", () => {
           expect(complementResult).to.deep.equal(["desired"]);
+        });
+      });
+
+      describe("When intersection() is called", () => {
+        const intersectionResult = intersection(left, right);
+
+        it("Returns an empty result set", () => {
+          expect(intersectionResult).to.deep.equal([]);
         });
       });
 
       describe("When union() is called, it...", () => {
         const unionResult = union(left, right);
+
         it("Returns both values", () => {
           expect(unionResult).to.deep.equal(["desired", "owned"]);
         });
@@ -95,8 +124,17 @@ describe("The diff module", () => {
         });
       });
 
+      describe("When intersection() is called", () => {
+        const intersectionResult = intersection(left, right);
+
+        it("Returns the equivalent value of either", () => {
+          expect(intersectionResult).to.deep.equal("left and right");
+        });
+      });
+
       describe("When union() is called, it...", () => {
         const unionResult = union(left, right);
+
         it("Returns the equivalent value of either", () => {
           expect(unionResult).to.deep.equal("left and right");
         });
@@ -105,45 +143,7 @@ describe("The diff module", () => {
   });
 });
 
-// Missing Item Detector Node
-//  Left Input: desiredInventory
-//  Right Input: actualInventory
-//
-
-//
-//   Left, Right
-//   union (everything), intersection (shared items), complement[left|right] (only in one set),
-
-/*
-
-
-
-{ name: "widget", quantity: 1 },
-
-// Calculator Node
-//  Left Input: desiredInventory
-//  Right Input: actualInventory
-//  InputType: Array of [scalar | object] 
-//     (if object, compare props)
-//  Operation: Subtract (multiply, etc...)
-
-
-["b", "c"] = { b: 1, c:1}
-["b", "c", "c"] 
-----
-[ "c" ]
-
-
-aaaabbbb vs. aaabb => abb => b:2, a:1
-
-// Missing Item Detector Node
-//  Left Input: desiredInventory
-//  Right Input: actualInventory
-//  
-
-
-// 
-//   Left, Right
-//   union (everything), intersection (shared items), complement[left|right] (only in one set), 
-
-*/
+// Differences Node Input:
+//  Left Input: [list | object]
+//  Right Input: [list | object]y
+//  Output Type: [ Union | Intersection | Left-Complement | Right-Complement ]

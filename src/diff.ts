@@ -53,6 +53,46 @@ export function complement<T>(desired: T, owned: T): Partial<T> {
     : complementOfArrays([desired], [owned]);
 }
 
+export function intersection<T>(left: T, right: T) {
+  function intersectionOfArrays(left: any[], right: any[]) {
+    const rightCache = right.map((r) => JSON.stringify(r));
+    return (left.filter((l) => {
+      const rightIndex = rightCache.findIndex((r) => r === JSON.stringify(l));
+      return rightIndex > -1 && rightCache.splice(rightIndex, 1);
+    }));
+  }
+
+  function intersectionOfTuples(
+    left: AnyPropertyTuple[],
+    right: AnyPropertyTuple[]
+  ) {
+    const rightCache = right.map((r) => JSON.stringify(r));
+    return left.reduce((result: AnyObject, l) => {
+      const rightIndex = rightCache.findIndex((r) => r === JSON.stringify(l));
+      if (rightIndex > -1) {
+        result[l[0]] = l[1];
+        rightCache.splice(rightIndex, 1);
+      }
+
+      return result;
+    }, {});
+  }
+
+  function intersectionOfScalars(left: any, right: any) {
+    const result = intersectionOfArrays([left], [right]);
+    return result.length === 1 ? result[0] : result;
+  }
+
+  return Array.isArray(left) && Array.isArray(right)
+    ? intersectionOfArrays(left, right)
+    : left === Object(left) && right === Object(right)
+    ? intersectionOfTuples(
+        Object.entries(left) as AnyPropertyTuple,
+        Object.entries(right) as AnyPropertyTuple
+      )
+    : intersectionOfScalars(left, right);
+}
+
 /**
  * Returns all the elements contained in either (or both) sets. Equality determined by value-based
  * (not object/reference based) comparisons.
@@ -138,7 +178,7 @@ export function union(left: any, right: any) {
     return result;
   }
 
-  function unionOfScalars(left: any, right: any){
+  function unionOfScalars(left: any, right: any) {
     const result = unionOfArrays([left], [right]);
     return result.length === 1 ? result[0] : result;
   }
