@@ -37,13 +37,13 @@ export function complement<T>(desired: T, owned: T): AnyObject {
     desired: AnyPropertyTuple[],
     owned: AnyPropertyTuple[]
   ) {
-    const ownCache = owned.map((own) => JSON.stringify(own));
+    const ownedCache = owned.map((own) => JSON.stringify(own));
     return desired.reduce((prev: AnyObject, desire) => {
-      const ownIndex = ownCache.findIndex(
+      const ownedIndex = ownedCache.findIndex(
         (own) => own === JSON.stringify(desire)
       );
-      if (ownIndex === -1) prev[desire[0]] = desire[1];
-      else ownCache.splice(ownIndex, 1);
+      if (ownedIndex === -1) prev[desire[0]] = desire[1];
+      else ownedCache.splice(ownedIndex, 1);
       return prev;
     }, {});
   }
@@ -94,7 +94,7 @@ export function intersection<T>(left: T, right: T) {
 
   function intersectionOfScalars(left: any, right: any) {
     const result = intersectionOfArrays([left], [right]);
-    return result.length === 1 ? result[0] : result;
+    return result.length === 1 ? result[0] : result; // Convert back to scalar if only one value
   }
 
   return Array.isArray(left) && Array.isArray(right)

@@ -31,7 +31,7 @@ describe("The diff module", () => {
       describe("When union() is called, it...", () => {
         const unionResult = union(left, right);
 
-        it("Returns the combines set of distinct equivelent values from both arrays", () => {
+        it("Returns the combines set of distinct equivalent values from both arrays", () => {
           expect(unionResult).to.deep.equal([
             4,
             "a",
@@ -70,7 +70,7 @@ describe("The diff module", () => {
       describe("When union() is called", () => {
         const unionResult = union(left, right);
 
-        it("Returns the combines set of distinct equivelent values from both arrays", () => {
+        it("Returns the combines set of distinct equivalent values from both arrays", () => {
           expect(unionResult).to.deep.equal({
             a: 1,
             b: [2, 1],
@@ -111,12 +111,12 @@ describe("The diff module", () => {
     });
   });
 
-  describe("Given two sets of values that are equivelent", () => {
+  describe("Given two sets of values that are equivalent", () => {
     describe("AND the sets are strings", () => {
       const left = "left and right";
       const right = "left and right";
 
-      describe("When complement() is calledm it...", () => {
+      describe("When complement() is called it...", () => {
         const complementResult = complement(left, right);
 
         it("Returns an empty array", () => {
