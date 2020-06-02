@@ -1,0 +1,98 @@
+[
+  {
+    "id": "6cf71678.9a8418",
+    "type": "tab",
+    "label": "Difference",
+    "disabled": false,
+    "info": ""
+  },
+  {
+    "id": "b5bab17f.f46c4",
+    "type": "inject",
+    "z": "6cf71678.9a8418",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "x": 100,
+    "y": 80,
+    "wires": [
+      [
+        "6bc398a4.8dd3c8"
+      ]
+    ]
+  },
+  {
+    "id": "8f85ff54.f5bff",
+    "type": "debug",
+    "z": "6cf71678.9a8418",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "x": 370,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "6bc398a4.8dd3c8",
+    "type": "change",
+    "z": "6cf71678.9a8418",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "left",
+        "pt": "msg",
+        "to": "[\"left once\",\"left twice\",\"left twice\",\"left once right twice\",\"both once\"]",
+        "tot": "json"
+      },
+      {
+        "t": "set",
+        "p": "right",
+        "pt": "msg",
+        "to": "[\"right once\",\"right twice\",\"right twice\",\"left once right twice\",\"left once right twice\",\"both once\"]",
+        "tot": "json"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 140,
+    "y": 120,
+    "wires": [
+      [
+        "51132fe1.03234"
+      ]
+    ]
+  },
+  {
+    "id": "51132fe1.03234",
+    "type": "differences",
+    "z": "6cf71678.9a8418",
+    "name": "",
+    "leftInput": "left",
+    "leftInputType": "msg",
+    "rightInput": "right",
+    "rightInputType": "msg",
+    "func": "⋃",
+    "outputType": "msg",
+    "output": "payload",
+    "x": 180,
+    "y": 160,
+    "wires": [
+      [
+        "8f85ff54.f5bff"
+      ]
+    ]
+  }
+]
