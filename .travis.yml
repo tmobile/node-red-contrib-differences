@@ -22,7 +22,7 @@ jobs:
       provider: npm
       email: OpenDevWG@t-mobile.com
       api_key:
-        secure: QMrs6MMeBkIjaKwDS6D1wCQX0JeewXFDAEuSJKxkRDS1YOH9DTF7JAwjpbTai/RugZFQlvsDqsR7bBwnBLsv/UIqBA4mm6vELdU5ExwX96buP41OndRqu1cAdBnWhI1tGzgW4jSazy1aZqCa++NaHZYDiwHEAHUP1tBAppRc7lLB72MiSOFM/3+ZVKRiYUR8nuU/diyPY4Lry0VIg10ijvU753yt4YAamu73zDSSXbXyQOrfqnVXtUb1AP/P3xy/wSlqKuOwDSikzUTOFnmDbF+DJnLsKPUzeYsvFsYTfUsU52fFkJbwtBh/lVK0FSOmqMmU5ptFr2t3xWEvH7gY1Yr1PGV9VOYavPxau8289T0dcP0p3up7MMjhlcnVWs+SbnSubnCThevT8Etpc6Sp++N6xfLpNFJskJhBHWKSpSbxnpbIjSE/hCFxtV1jfxWfXZxro2gPBfjmkFoCworQB/o5wE7tFC121lAiI+wUqJTvuPl2olabna1JEXzWeLnuhXInffkDrhnQoBA6a+SjA4uU/GmsQ+q6+pUtsOEspn+f/NheEc+nT6k00huxsmfnVwWf2kQn6bO3RvxPFlByR12oDsQiKEt2sfrapeZvTPtGjyoZ6lV1Vd3c9pEAX5hP+xC7J59jvGplENtWR7zwoZlQIq1FQsKfm08MDPaLEA4=
+        secure: PYnLnG0agI6T/Mv3qkr9V/Ryp/ytry27fHDuQnPhyKrOfKb9mo6ohNRUciFW3GEs53rmxkZ6xp/vDKTe5+OVxAd0XOTJJKb9KHosSgnD8Lv2rVUfoyckYhzyCsMoDM5zehJAbNWtczI69uxLF4GoVqsCi88+/7m+R8MUbdH9ZM1uWeo/JzAcKet8dVmoH9ucEvKsGE52BMqKkhdZxINdMZkVOd3HhVSdaClRRbGJPqFZiA4e3eWSnPGL0ZcvgOPenI1O5hiQN7BlXhZH6zZI1iZgOSWSYvnHwBK74nl+6FqXq+ssuiiN9+ILA+hwgb+Z3s0a8SJCZrGb4HUphk3O30Za/5K54iHE8QtM3JKuiCTG7HBjF2UYN21FBYzeYtA83OIdZA16Vpz+pHeHAnk3rsc39KVlaO7Ec2ZPUQRoFkGwAVwkUpdI8y4KbmwYjad/BbrsbaVQcjTlIg0cYPcIgD6nWXG+W5c2virpFT+b0JJQIJB3hh3qcAKZqwQvo6YV++3g9DLaBzSx4vpjhdjdd+rEvLAJjnyrucwZSpDaipAeB5kic9rLi/Mq9W+dmWWSlJ/OQcDmRLCoeU4FDnL+eHb3RMZ6aB11oTwxasVfvGrKMGdSYMGgREne/+xZV4NhbK3HgC+wEIRzh+Duy+fXGVaiuZsjX3IW4V2OUugSBVc=
       on:
         tags: true
       skip_cleanup: true
