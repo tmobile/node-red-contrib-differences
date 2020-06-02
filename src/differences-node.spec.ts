@@ -17,7 +17,7 @@ import { expect } from "chai";
 
 helper.init(require.resolve("node-red"));
 
-describe("differences Node", function () {
+describe("The Differences Node", function () {
   // beforeEach(function (done) {
   //   helper.startServer(done);
   // });
@@ -28,17 +28,110 @@ describe("differences Node", function () {
     // helper.stopServer(done);
   });
 
+  const flow = [
+    {
+      id: "n1",
+      type: "differences",
+      leftInput: "left",
+      leftInputType: "msg",
+      rightInput: "right",
+      rightInputType: "msg",
+      func: "-",
+      outputType: "msg",
+      output: "payload",
+      wires: [["n2"]],
+    },
+    { id: "n2", type: "helper" },
+  ];
+
   it("should be loaded", function (done) {
-    const flow = [{ id: "n1", type: "differences", name: "test name" }];
     helper.load(differencesNode, flow, function () {
-      const n1 = helper.getNode("n1");
-      expect(n1.name).to.equal("test name");
-      done();
+      try {
+        const n1 = helper.getNode("n1");
+        expect(n1.type).to.equal("differences");
+        done();
+      } catch (err) {
+        done(err);
+      }
     });
   });
 
-  it.skip("should output differences", function (done) {
-    // TODO: Write the test
-    done();
+  it("should output complement", function (done) {
+    flow[0].func = "-";
+    helper.load(differencesNode, flow, function () {
+      try {
+        const n1 = helper.getNode("n1");
+        const n2 = helper.getNode("n2");
+
+        n2.on("input", function (msg: any) {
+          try {
+            console.log("GETTING INPUT");
+            expect(msg.payload).to.deep.equal(["left"]);
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+
+        n1.receive({ payload: "whatever", left: ["left"], right: ["right"] });
+      } catch (err) {
+        done(err);
+      }
+    });
+  });
+
+  it("should output intersection", function (done) {
+    flow[0].func = "⋂";
+    helper.load(differencesNode, flow, function () {
+      try {
+        const n1 = helper.getNode("n1");
+        const n2 = helper.getNode("n2");
+
+        n2.on("input", function (msg: any) {
+          try {
+            console.log("GETTING INPUT");
+            expect(msg.payload).to.deep.equal(["left"]);
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+
+        n1.receive({
+          payload: "whatever",
+          left: ["left"],
+          right: ["right", "left"],
+        });
+      } catch (err) {
+        done(err);
+      }
+    });
+  });
+
+  it("should output union", function (done) {
+    flow[0].func = "⋃";
+    helper.load(differencesNode, flow, function () {
+      try {
+        const n1 = helper.getNode("n1");
+        const n2 = helper.getNode("n2");
+
+        n2.on("input", function (msg: any) {
+          try {
+            expect(msg.payload).to.deep.equal(["left", "right"]);
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+
+        n1.receive({
+          payload: "whatever",
+          left: ["left"],
+          right: ["right", "left"],
+        });
+      } catch (err) {
+        done(err);
+      }
+    });
   });
 });

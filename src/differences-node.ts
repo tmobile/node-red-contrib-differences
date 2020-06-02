@@ -35,8 +35,6 @@ export default function differencesNode(RED: Red) {
     // Output
     this.output = config.output || "payload";
 
-    console.log("DifferencesNode, constructor", config);
-
     node.on("input", function (msg, send) {
       const leftInputValue = RED.util.evaluateNodeProperty(
         this.leftInput, // "payload", "widgets", "gadgets", etc.
@@ -52,10 +50,6 @@ export default function differencesNode(RED: Red) {
         msg
       );
 
-      console.log("Left Input!", leftInputValue);
-      console.log("Right Input!", rightInputValue);
-      console.log("Function", this.func);
-
       switch (this.func) {
         case "-":
           msg[this.output] = complement(leftInputValue, rightInputValue);
@@ -69,8 +63,6 @@ export default function differencesNode(RED: Red) {
         default:
           throw new Error(`Unknown function selection: ${this.func}`);
       }
-
-      console.log("msg", msg);
 
       send(msg);
     });
