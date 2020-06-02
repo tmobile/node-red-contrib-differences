@@ -105,8 +105,8 @@ Input as an object:
 Fork this repository, then:
 
 ```
-git clone git@github.com:tmobile/node-red-contrib-msg-diff.git
-cd node-red-contrib-msg-diff
+git clone https://github.com/tmobile/node-red-contrib-differences.git
+cd node-red-contrib-differences
 npm run build
 cd ~/.node-red
 npm install <path to cloned repository> --save
