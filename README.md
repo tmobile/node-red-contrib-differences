@@ -16,6 +16,8 @@ Drag and Drop the "Differences" node onto the canvas. Set the `Left` and `Right`
 
 ## Examples
 
+See also [example-flow.json](example-flow.json).
+
 ### Complement
 
 Input as an array:
