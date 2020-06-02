@@ -1,5 +1,8 @@
 # node-red-contrib-differences
 
+[![Travis (.com) branch](https://img.shields.io/travis/com/tmobile/node-red-contrib-differences/master?style=flat-square)](https://travis-ci.com/tmobile/node-red-contrib-differences) ![GitHub package.json version](https://img.shields.io/github/package-json/v/tmobile/node-red-contrib-differences?style=flat-square) [![npm (scoped)](https://img.shields.io/npm/v/@tmus/node-red-contrib-differences?style=flat-square)](https://www.npmjs.com/package/@tmus/node-red-contrib-differences)
+
+
 This Node-RED node will compare two input arrays, then output the differences.
 
 ## Examples
