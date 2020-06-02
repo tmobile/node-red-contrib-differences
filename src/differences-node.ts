@@ -20,11 +20,16 @@ export default function differencesNode(RED: Red) {
     const node = this as Node;
     // const context = this.context();
 
+    // Left input
     this.leftInput = config.leftInput || "payload";
     this.leftInputType = config.leftInputType || "msg";
 
+    // Right input
     this.rightInput = config.rightInput || "payload";
     this.rightInputType = config.rightInputType || "msg";
+
+    // Output
+    this.output = config.output || "payload";
 
     console.log("DifferencesNode, constructor", config);
 

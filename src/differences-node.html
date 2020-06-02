@@ -21,18 +21,21 @@ its contributors may be used to endorse or promote products derived from this so
         value: "payload",
         validate: RED.validators.typedInput("leftInputType"),
       },
+      leftInputType: { value: "msg" },
       rightInput: {
         value: "payload",
         validate: RED.validators.typedInput("rightInputType"),
       },
-      leftInputType: { value: "msg" },
       rightInputType: { value: "msg" },
+      outputType: { value: "msg" },
+      output: { value: "payload" },
     },
     icon: "font-awesome/fa-stream",
     inputs: 1,
     outputs: 1,
-    paletteLabel: "Array Differ",
+    paletteLabel: "Set Differences",
     label: function () {
+      // TODO: Get <function> of <left input> and <right input>
       return this.name || "Get differences";
     },
     oneditprepare: function () {
@@ -55,10 +58,20 @@ its contributors may be used to endorse or promote products derived from this so
         types: ["msg", "flow", "global"],
       });
       $("#node-input-rightInput").typedInput("type", this.rightInputType);
+
+      // Output
+      $("#node-input-outputType").val(this.outputType);
+      $("#node-input-output").typedInput({
+        default: "msg",
+        typeField: $("#node-input-outputType"),
+        types: ["msg"],
+      });
+      $("#node-input-output").typedInput("type", this.outputType);
     },
     oneditsave: function () {
       this.leftInputType = $("#node-input-leftInput").typedInput("type");
       this.rightInputType = $("#node-input-rightInput").typedInput("type");
+      this.outputType = $("#node-input-output").typedInput("type");
     },
   });
 </script>
@@ -79,6 +92,12 @@ its contributors may be used to endorse or promote products derived from this so
     <label for="node-input-rightInput"><i class="fa fa-envelope"></i> Right Input <span data-i18n="common.label.input"></span></label>
     <input type="text" id="node-input-rightInput" style="width:70%">
     <input type="hidden" id="node-input-rightInputType">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-output">Output <i class="fa fa-envelope"></i></label>
+    <input type="text" id="node-input-output" style="width:70%">
+    <input type="hidden" id="node-input-outputType">
   </div>
 </script>
 
