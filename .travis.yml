@@ -1,0 +1,28 @@
+language: node_js
+node_js:
+- '14'
+cache:
+  directories:
+  - node_modules
+install:
+- npm install
+jobs:
+  include:
+  - stage: build
+    script: npm run test && npm run build
+    on:
+      branch: master
+  - stage: pr-build
+    if: "(type IN (pull_request))"
+    script: npm run test && npm run build
+  - stage: deploy
+    if: tag IS present
+    script: npm run test && npm run build
+    deploy:
+      provider: npm
+      email: OpenDevWG@t-mobile.com
+      api_key:
+        secure: QMrs6MMeBkIjaKwDS6D1wCQX0JeewXFDAEuSJKxkRDS1YOH9DTF7JAwjpbTai/RugZFQlvsDqsR7bBwnBLsv/UIqBA4mm6vELdU5ExwX96buP41OndRqu1cAdBnWhI1tGzgW4jSazy1aZqCa++NaHZYDiwHEAHUP1tBAppRc7lLB72MiSOFM/3+ZVKRiYUR8nuU/diyPY4Lry0VIg10ijvU753yt4YAamu73zDSSXbXyQOrfqnVXtUb1AP/P3xy/wSlqKuOwDSikzUTOFnmDbF+DJnLsKPUzeYsvFsYTfUsU52fFkJbwtBh/lVK0FSOmqMmU5ptFr2t3xWEvH7gY1Yr1PGV9VOYavPxau8289T0dcP0p3up7MMjhlcnVWs+SbnSubnCThevT8Etpc6Sp++N6xfLpNFJskJhBHWKSpSbxnpbIjSE/hCFxtV1jfxWfXZxro2gPBfjmkFoCworQB/o5wE7tFC121lAiI+wUqJTvuPl2olabna1JEXzWeLnuhXInffkDrhnQoBA6a+SjA4uU/GmsQ+q6+pUtsOEspn+f/NheEc+nT6k00huxsmfnVwWf2kQn6bO3RvxPFlByR12oDsQiKEt2sfrapeZvTPtGjyoZ6lV1Vd3c9pEAX5hP+xC7J59jvGplENtWR7zwoZlQIq1FQsKfm08MDPaLEA4=
+      on:
+        tags: true
+      skip_cleanup: true
