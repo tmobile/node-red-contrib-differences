@@ -1,13 +1,13 @@
 <!-- 
-  ========================================================================= 
-  Copyright 2020 T-Mobile USA, Inc.
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-  See the LICENSE file for additional language around the disclaimer of warranties. Trademark Disclaimer: Neither the name of "T-Mobile, USA" nor the names of
-  its contributors may be used to endorse or promote products derived from this software without specific prior written permission. 
+========================================================================= 
+Copyright 2020 T-Mobile USA, Inc.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+See the LICENSE file for additional language around the disclaimer of warranties. Trademark Disclaimer: Neither the name of "T-Mobile, USA" nor the names of
+its contributors may be used to endorse or promote products derived from this software without specific prior written permission. 
 ================================ 
 -->
 
@@ -15,15 +15,74 @@
   RED.nodes.registerType("differences", {
     category: "function",
     color: "#3FADB5",
-    defaults: {
-      name: { value: "" }
-    },
-    icon: "font-awesome/fa-stream",
+    icon: "font-awesome/fa-question-circle-o",
     inputs: 1,
     outputs: 1,
-    paletteLabel: "Array Differ",
+    paletteLabel: "Differences",
+    defaults: {
+      name: { value: "" },
+
+      leftInput: {
+        value: "left",
+        validate: RED.validators.typedInput("leftInputType"),
+      },
+      leftInputType: { value: "msg" },
+
+      rightInput: {
+        value: "right",
+        validate: RED.validators.typedInput("rightInputType"),
+      },
+      rightInputType: { value: "msg" },
+
+      func: {
+        value: "-",
+        validate: RED.validators.regex(/(-|⋂|⋃){1}/),
+      },
+
+      outputType: { value: "msg" },
+      output: { value: "payload" },
+    },
     label: function () {
-      return (this.name || "Get differences");
+      // TODO: Get <function> of <left input> and <right input>
+      return (
+        this.name ||
+        `${this.leftInputType}.${this.leftInput} ${this.func} ${this.rightInputType}.${this.rightInput}`
+      );
+    },
+    oneditprepare: function () {
+      // For examples, see https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/nodes/core/common/20-inject.html
+
+      // Left Input
+      $("#node-input-leftInputType").val(this.leftInputType);
+      $("#node-input-leftInput").typedInput({
+        default: this.leftInputType || "msg",
+        typeField: $("#node-input-leftInputType"),
+        types: ["msg", "flow", "global"],
+      });
+      $("#node-input-leftInput").typedInput("type", this.leftInputType);
+
+      // Right Input
+      $("#node-input-rightInputType").val(this.inputType);
+      $("#node-input-rightInput").typedInput({
+        default: this.inputType || "msg",
+        typeField: $("#node-input-rightInputType"),
+        types: ["msg", "flow", "global"],
+      });
+      $("#node-input-rightInput").typedInput("type", this.rightInputType);
+
+      // Output
+      $("#node-input-outputType").val(this.outputType);
+      $("#node-input-output").typedInput({
+        default: "msg",
+        typeField: $("#node-input-outputType"),
+        types: ["msg"],
+      });
+      $("#node-input-output").typedInput("type", this.outputType);
+    },
+    oneditsave: function () {
+      this.leftInputType = $("#node-input-leftInput").typedInput("type");
+      this.rightInputType = $("#node-input-rightInput").typedInput("type");
+      this.outputType = $("#node-input-output").typedInput("type");
     },
   });
 </script>
@@ -33,8 +92,45 @@
     <label for="node-input-name"><i class="icon-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name">
   </div>
+
+  <div class="form-row">
+    <label for="node-input-leftInput"><i class="fa fa-align-left"></i> Left Input <span data-i18n="common.label.input"></span></label>
+    <input type="text" id="node-input-leftInput" style="width:70%">
+    <input type="hidden" id="node-input-leftInputType">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-rightInput"><i class="fa fa-align-right"></i> Right Input <span data-i18n="common.label.input"></span></label>
+    <input type="text" id="node-input-rightInput" style="width:70%">
+    <input type="hidden" id="node-input-rightInputType">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-func"><i class="fa fa-cogs"></i> Function</span></label>
+    <select id="node-input-func">
+        <option value="-">Complement (-)</option>
+        <option value="⋂">Intersection (⋂)</option>
+        <option value="⋃">Union (⋃)</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label>&nbsp;</label>
+    <label style="width:70%">
+    <ul>
+        <li><strong>Complement (-)</strong><br/> Sets the output to what's in <code>left</code> input, but not the <code>right</code></li>
+        <li><strong>Intersection (⋂)</strong><br/> Sets the output to what's in <code>left</code> input that's ALSO in the <code>right</code></li>
+        <li><strong>Union (⋃)</strong><br/> Sets the output to what's in <code>left</code> input PLUS what's in the <code>right</code></li>
+    </ul>
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-output">Output <i class="fa fa-envelope"></i></label>
+    <input type="text" id="node-input-output" style="width:70%">
+    <input type="hidden" id="node-input-outputType">
+  </div>
 </script>
 
 <script type="text/html" data-help-name="differences">
-  <p>Given two array inputs, when this node is executed it will output the differences between the two arrays.</p>
+  <p>Given a left input and a right input, when this node is executed it will output a new value based on how the two inputs overlap.</p>
 </script>

@@ -11,7 +11,7 @@
     "build": "npm run prepack",
     "build:ci": "npm pack --unsafe-perm",
     "test": "mocha -r ts-node/register \"**/*.spec.ts\"",
-    "start": "ts-node src/index.ts"
+    "start": "npm run build && node-red"
   },
   "repository": {
     "type": "git",

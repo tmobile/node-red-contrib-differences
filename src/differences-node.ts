@@ -12,13 +12,59 @@ its contributors may be used to endorse or promote products derived from this so
 */
 
 import { Red, Node, NodeProperties } from "node-red";
+import { complement, intersection, union } from "./diff";
 
 export default function differencesNode(RED: Red) {
   function DifferencesNode(config: NodeProperties & { [key: string]: any }) {
     RED.nodes.createNode(this, config);
+
     const node = this as Node;
-    node.on("input", function () {
-      // TODO: Diff the arrays
+    // const context = this.context();
+
+    // Left input
+    this.leftInput = config.leftInput || "left";
+    this.leftInputType = config.leftInputType || "msg";
+
+    // Right input
+    this.rightInput = config.rightInput || "right";
+    this.rightInputType = config.rightInputType || "msg";
+
+    // Function
+    this.func = config.func || "-";
+
+    // Output
+    this.output = config.output || "payload";
+
+    node.on("input", function (msg, send) {
+      const leftInputValue = RED.util.evaluateNodeProperty(
+        this.leftInput, // "payload", "widgets", "gadgets", etc.
+        this.leftInputType, // "msg", "flow", "global"
+        node,
+        msg
+      );
+
+      const rightInputValue = RED.util.evaluateNodeProperty(
+        this.rightInput, // "payload", "widgets", "gadgets", etc.
+        this.rightInputType, // "msg", "flow", "global"
+        node,
+        msg
+      );
+
+      switch (this.func) {
+        case "-":
+          msg[this.output] = complement(leftInputValue, rightInputValue);
+          break;
+        case "⋂":
+          msg[this.output] = intersection(leftInputValue, rightInputValue);
+          break;
+        case "⋃":
+          msg[this.output] = union(leftInputValue, rightInputValue);
+          break;
+        default:
+          throw new Error(`Unknown function selection: ${this.func}`);
+      }
+
+      send(msg);
     });
   }
 
@@ -26,3 +72,8 @@ export default function differencesNode(RED: Red) {
 }
 
 module.exports = differencesNode;
+
+// Differences Node Input:
+//  Left Input: [list | object]
+//  Right Input: [list | object]
+//  Output Type: [ Union | Intersection | Left-Complement | Right-Complement ]

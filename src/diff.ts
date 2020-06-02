@@ -3,44 +3,49 @@
  */
 type AnyPropertyTuple = [string, any];
 
+/**
+ * An object that can have any set of properties
+ *
+ * @interface AnyObject
+ */
 interface AnyObject {
   [key: string]: any;
 }
 
 /**
- * Returns the list of of items the `desired` array contains that is NOT in the `owned` array. Equality determined by value-based
+ * Returns the elements from `desired` that do NOT have equivalent entries in `owned`. Equality determined by value-based
  * (not object/reference based) comparisons.
  *
  * @export
- * @template T
- * @param {T[]} desired - The list of desired items
- * @param {T[]} owned - The list of owned items
+ * @template T - Both arguments should share the same type, at least partially
+ * @param {T[]} desired - An object or array that represents a set of desired values
+ * @param {T[]} owned - An object or array that represents a set of owned values
  * @returns {T[]} - Items in `desired` but not in `owned`
  */
-export function complement<T>(desired: T, owned: T): Partial<T> {
-  function complementOfArrays(desired: any[], owned: any[]): Partial<T> {
-    const ownCache = owned.map((own) => JSON.stringify(own));
-    return (desired.filter((desire) => {
-      const ownIndex = ownCache.findIndex(
+export function complement<T>(desired: T, owned: T): AnyObject {
+  function complementOfArrays(desired: any[], owned: any[]) {
+    const ownedCache = owned.map((own) => JSON.stringify(own));
+    return desired.filter((desire) => {
+      const ownIndex = ownedCache.findIndex(
         (own) => own === JSON.stringify(desire)
       );
-      return ownIndex === -1 || !ownCache.splice(ownIndex, 1);
-    }) as unknown) as T;
+      return ownIndex === -1 || !ownedCache.splice(ownIndex, 1); // Splice so not found twice
+    });
   }
 
   function complementOfTuples(
     desired: AnyPropertyTuple[],
     owned: AnyPropertyTuple[]
-  ): Partial<T> {
-    const ownCache = owned.map((own) => JSON.stringify(own));
+  ) {
+    const ownedCache = owned.map((own) => JSON.stringify(own));
     return desired.reduce((prev: AnyObject, desire) => {
-      const ownIndex = ownCache.findIndex(
+      const ownedIndex = ownedCache.findIndex(
         (own) => own === JSON.stringify(desire)
       );
-      if (ownIndex === -1) prev[desire[0]] = desire[1];
-      else ownCache.splice(ownIndex, 1);
+      if (ownedIndex === -1) prev[desire[0]] = desire[1];
+      else ownedCache.splice(ownedIndex, 1);
       return prev;
-    }, {}) as T;
+    }, {});
   }
 
   return Array.isArray(desired) && Array.isArray(owned)
@@ -53,13 +58,22 @@ export function complement<T>(desired: T, owned: T): Partial<T> {
     : complementOfArrays([desired], [owned]);
 }
 
+/**
+ * Returns the entries that exist equivalently in both the `left` and `right`.
+ *
+ * @export
+ * @template T - Both arguments should share the same type, at least partially
+ * @param {T} left - An object or array containing elements that may have equivalent values in right
+ * @param {T} right - An object or array containing elements that may have equivalent values in left
+ * @returns
+ */
 export function intersection<T>(left: T, right: T) {
   function intersectionOfArrays(left: any[], right: any[]) {
     const rightCache = right.map((r) => JSON.stringify(r));
-    return (left.filter((l) => {
+    return left.filter((l) => {
       const rightIndex = rightCache.findIndex((r) => r === JSON.stringify(l));
       return rightIndex > -1 && rightCache.splice(rightIndex, 1);
-    }));
+    });
   }
 
   function intersectionOfTuples(
@@ -80,7 +94,7 @@ export function intersection<T>(left: T, right: T) {
 
   function intersectionOfScalars(left: any, right: any) {
     const result = intersectionOfArrays([left], [right]);
-    return result.length === 1 ? result[0] : result;
+    return result.length === 1 ? result[0] : result; // Convert back to scalar if only one value
   }
 
   return Array.isArray(left) && Array.isArray(right)
