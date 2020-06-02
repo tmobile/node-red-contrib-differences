@@ -4,13 +4,23 @@ import { expect } from "chai";
 describe("The diff module", () => {
   describe("Given two sets of values with equivalent and distinct values...", () => {
     describe("AND the sets are arrays", () => {
-      const left = ["a", "b", "b", { c: 3 }, 4, { d: 5 }, [1, 2, 3], [4, 5, 6]];
-      const right = ["a", "b", { c: 2 }, 4, [1, 2, 3]];
+      const left = [
+        "a",
+        "b",
+        "b",
+        { c: 3 },
+        4,
+        { d: 5 },
+        [1, 2, 3],
+        [4, 5, 6],
+        "l1 r2",
+      ];
+      const right = ["a", "b", { c: 2 }, 4, [1, 2, 3], "l1 r2", "l1 r2"];
 
       describe("When complement() is called, it...", () => {
         const complementResult = complement(left, right);
 
-        it("Returns the set of 'missing' values (the complement)", () => {
+        it("Returns the set of values from the left that are not present in the right", () => {
           expect(complementResult).to.deep.equal([
             "b",
             { c: 3 },
@@ -24,14 +34,14 @@ describe("The diff module", () => {
         const intersectionResult = intersection(left, right);
 
         it("Returns the set of equivalent values that are in both arrays", () => {
-          expect(intersectionResult).to.deep.equal(["a", "b", 4, [1, 2, 3]]);
+          expect(intersectionResult).to.deep.equal(["a", "b", 4, [1, 2, 3], "l1 r2"]);
         });
       });
 
       describe("When union() is called, it...", () => {
         const unionResult = union(left, right);
 
-        it("Returns the combines set of distinct equivalent values from both arrays", () => {
+        it("Returns the combined set of equivalent values from both arrays", () => {
           expect(unionResult).to.deep.equal([
             4,
             "a",
@@ -41,6 +51,8 @@ describe("The diff module", () => {
             { d: 5 },
             [1, 2, 3],
             [4, 5, 6],
+            "l1 r2",
+            "l1 r2",
             { c: 2 },
           ]); // TODO: Order shouldn't matter
         });

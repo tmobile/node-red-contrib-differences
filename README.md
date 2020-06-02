@@ -1,12 +1,16 @@
 # node-red-contrib-differences
 
-This Node-RED node will compare two input arrays, then output the chosen "set" of differences.
+This Node-RED node will compare two inputs, then create output based on how the inputs differ.
 
 Sets include:
 
 * **Complement**: What's in one input, but not the other
 * **Intersection**: What's common in both inputs
 * **Union**: Everything from both inputs
+
+## Usage
+
+Drag and Drop the "Differences" node onto the canvas. Set the `Left` and `Right` input values to the source sets, set the `Function` value baed on how you want differences between the left and right sets treated, and the `Output` value to the destination property.
 
 ## Examples
 

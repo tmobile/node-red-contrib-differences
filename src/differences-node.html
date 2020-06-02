@@ -15,28 +15,39 @@ its contributors may be used to endorse or promote products derived from this so
   RED.nodes.registerType("differences", {
     category: "function",
     color: "#3FADB5",
+    icon: "font-awesome/fa-question-circle-o",
+    inputs: 1,
+    outputs: 1,
+    paletteLabel: "Differences",
     defaults: {
       name: { value: "" },
+
       leftInput: {
-        value: "payload",
+        value: "left",
         validate: RED.validators.typedInput("leftInputType"),
       },
       leftInputType: { value: "msg" },
+
       rightInput: {
-        value: "payload",
+        value: "right",
         validate: RED.validators.typedInput("rightInputType"),
       },
       rightInputType: { value: "msg" },
+
+      func: {
+        value: "-",
+        validate: RED.validators.regex(/(-|⋂|⋃){1}/),
+      },
+
       outputType: { value: "msg" },
       output: { value: "payload" },
     },
-    icon: "font-awesome/fa-stream",
-    inputs: 1,
-    outputs: 1,
-    paletteLabel: "Set Differences",
     label: function () {
       // TODO: Get <function> of <left input> and <right input>
-      return this.name || "Get differences";
+      return (
+        this.name ||
+        `${this.leftInputType}.${this.leftInput} ${this.func} ${this.rightInputType}.${this.rightInput}`
+      );
     },
     oneditprepare: function () {
       // For examples, see https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/nodes/core/common/20-inject.html
@@ -83,15 +94,34 @@ its contributors may be used to endorse or promote products derived from this so
   </div>
 
   <div class="form-row">
-    <label for="node-input-leftInput"><i class="fa fa-envelope"></i> Left Input <span data-i18n="common.label.input"></span></label>
+    <label for="node-input-leftInput"><i class="fa fa-align-left"></i> Left Input <span data-i18n="common.label.input"></span></label>
     <input type="text" id="node-input-leftInput" style="width:70%">
     <input type="hidden" id="node-input-leftInputType">
   </div>
 
   <div class="form-row">
-    <label for="node-input-rightInput"><i class="fa fa-envelope"></i> Right Input <span data-i18n="common.label.input"></span></label>
+    <label for="node-input-rightInput"><i class="fa fa-align-right"></i> Right Input <span data-i18n="common.label.input"></span></label>
     <input type="text" id="node-input-rightInput" style="width:70%">
     <input type="hidden" id="node-input-rightInputType">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-func"><i class="fa fa-cogs"></i> Function</span></label>
+    <select id="node-input-func">
+        <option value="-">Complement (-)</option>
+        <option value="⋂">Intersection (⋂)</option>
+        <option value="⋃">Union (⋃)</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label>&nbsp;</label>
+    <label style="width:70%">
+    <ul>
+        <li><strong>Complement (-)</strong><br/> Sets the output to what's in <code>left</code> input, but not the <code>right</code></li>
+        <li><strong>Intersection (⋂)</strong><br/> Sets the output to what's in <code>left</code> input that's ALSO in the <code>right</code></li>
+        <li><strong>Union (⋃)</strong><br/> Sets the output to what's in <code>left</code> input PLUS what's in the <code>right</code></li>
+    </ul>
+    </label>
   </div>
 
   <div class="form-row">

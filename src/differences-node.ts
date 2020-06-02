@@ -12,6 +12,7 @@ its contributors may be used to endorse or promote products derived from this so
 */
 
 import { Red, Node, NodeProperties } from "node-red";
+import { complement, intersection, union } from "./diff";
 
 export default function differencesNode(RED: Red) {
   function DifferencesNode(config: NodeProperties & { [key: string]: any }) {
@@ -21,12 +22,15 @@ export default function differencesNode(RED: Red) {
     // const context = this.context();
 
     // Left input
-    this.leftInput = config.leftInput || "payload";
+    this.leftInput = config.leftInput || "left";
     this.leftInputType = config.leftInputType || "msg";
 
     // Right input
-    this.rightInput = config.rightInput || "payload";
+    this.rightInput = config.rightInput || "right";
     this.rightInputType = config.rightInputType || "msg";
+
+    // Function
+    this.func = config.func || "-";
 
     // Output
     this.output = config.output || "payload";
@@ -50,6 +54,23 @@ export default function differencesNode(RED: Red) {
 
       console.log("Left Input!", leftInputValue);
       console.log("Right Input!", rightInputValue);
+      console.log("Function", this.func);
+
+      switch (this.func) {
+        case "-":
+          msg[this.output] = complement(leftInputValue, rightInputValue);
+          break;
+        case "⋂":
+          msg[this.output] = intersection(leftInputValue, rightInputValue);
+          break;
+        case "⋃":
+          msg[this.output] = union(leftInputValue, rightInputValue);
+          break;
+        default:
+          throw new Error(`Unknown function selection: ${this.func}`);
+      }
+
+      console.log("msg", msg);
 
       send(msg);
     });
