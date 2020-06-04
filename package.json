@@ -18,7 +18,7 @@
     "url": "https://github.com/tmobile/node-red-contrib-differences"
   },
   "keywords": [
-    "Node-RED",
+    "node-red",
     "Array Differences",
     "IoT",
     "Internet of Things"
@@ -42,5 +42,9 @@
     "node-red-node-test-helper": "^0.2.3",
     "ts-node": "^8.8.2",
     "typescript": "^3.8.3"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/tmobile/node-red-contrib-differences/issues"
+  },
+  "homepage": "https://github.com/tmobile/node-red-contrib-differences"
 }

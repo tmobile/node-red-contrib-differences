@@ -35,7 +35,7 @@ export default function differencesNode(RED: Red) {
     // Output
     this.output = config.output || "payload";
 
-    node.on("input", function (msg, send) {
+    node.on("input", function (msg: any, send: { (msg: any): void }) {
       const leftInputValue = RED.util.evaluateNodeProperty(
         this.leftInput, // "payload", "widgets", "gadgets", etc.
         this.leftInputType, // "msg", "flow", "global"
@@ -72,8 +72,3 @@ export default function differencesNode(RED: Red) {
 }
 
 module.exports = differencesNode;
-
-// Differences Node Input:
-//  Left Input: [list | object]
-//  Right Input: [list | object]
-//  Output Type: [ Union | Intersection | Left-Complement | Right-Complement ]
