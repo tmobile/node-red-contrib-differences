@@ -55,7 +55,10 @@ export function complement<T>(desired: T, owned: T): AnyObject {
         Object.entries(desired) as AnyPropertyTuple,
         Object.entries(owned) as AnyPropertyTuple
       )
-    : complementOfArrays([desired], [owned]);
+    : complementOfArrays(
+        Array.isArray(desired) ? desired : [desired],
+        Array.isArray(owned) ? owned : [owned]
+      );
 }
 
 /**
