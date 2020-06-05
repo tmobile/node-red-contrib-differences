@@ -34,7 +34,13 @@ describe("The diff module", () => {
         const intersectionResult = intersection(left, right);
 
         it("Returns the set of equivalent values that are in both arrays", () => {
-          expect(intersectionResult).to.deep.equal(["a", "b", 4, [1, 2, 3], "l1 r2"]);
+          expect(intersectionResult).to.deep.equal([
+            "a",
+            "b",
+            4,
+            [1, 2, 3],
+            "l1 r2",
+          ]);
         });
       });
 
@@ -97,7 +103,7 @@ describe("The diff module", () => {
       const left = "desired";
       const right = "owned";
 
-      describe("When complement() is called", () => {
+      describe("When complement() is called, it...", () => {
         const complementResult = complement(left, right);
 
         it("Returns the 'left' (desired) value", () => {
@@ -105,7 +111,7 @@ describe("The diff module", () => {
         });
       });
 
-      describe("When intersection() is called", () => {
+      describe("When intersection() is called, it...", () => {
         const intersectionResult = intersection(left, right);
 
         it("Returns an empty result set", () => {
@@ -136,10 +142,10 @@ describe("The diff module", () => {
         });
       });
 
-      describe("When intersection() is called", () => {
+      describe("When intersection() is called, it...", () => {
         const intersectionResult = intersection(left, right);
 
-        it("Returns the equivalent value of either", () => {
+        it("Returns the equivalent value of either, it...", () => {
           expect(intersectionResult).to.deep.equal("left and right");
         });
       });
@@ -149,6 +155,35 @@ describe("The diff module", () => {
 
         it("Returns the equivalent value of either", () => {
           expect(unionResult).to.deep.equal("left and right");
+        });
+      });
+    });
+  });
+
+  describe("Given two sets of values where the left set is undefined", () => {
+    describe("AND the other set is an array", () => {
+      const left = undefined;
+      const right = ["one", "two"];
+
+      describe("When complement() is called, it...", () => {
+        const complementResult = complement(left, right);
+        it("Returns an empty set", () => {
+          expect(complementResult).to.deep.equal([]);
+        });
+      });
+
+      describe("When intersection() is called, it...", () => {
+        const intersectionResult = intersection(left, right);
+        it("Returns an empty set", () => {
+          expect(intersectionResult).to.deep.equal([]);
+        });
+      });
+
+      describe("When union() is called, it...", () => {
+        const unionResult = union(left, right);
+        it("Returns the right set", () => {
+          console.log(unionResult);
+          //   expect(unionResult).to.deep.equal(["one", "two"]);
         });
       });
     });

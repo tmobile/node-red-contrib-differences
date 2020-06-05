@@ -12,6 +12,14 @@ interface AnyObject {
   [key: string]: any;
 }
 
+function coerceMismatchedValueToArray(value: any) {
+  return Array.isArray(value)
+    ? value
+    : value === undefined || value === null
+    ? []
+    : [value];
+}
+
 /**
  * Returns the elements from `desired` that do NOT have equivalent entries in `owned`. Equality determined by value-based
  * (not object/reference based) comparisons.
@@ -56,8 +64,8 @@ export function complement<T>(desired: T, owned: T): AnyObject {
         Object.entries(owned) as AnyPropertyTuple
       )
     : complementOfArrays(
-        Array.isArray(desired) ? desired : [desired],
-        Array.isArray(owned) ? owned : [owned]
+        coerceMismatchedValueToArray(desired),
+        coerceMismatchedValueToArray(owned)
       );
 }
 
@@ -196,7 +204,11 @@ export function union(left: any, right: any) {
   }
 
   function unionOfScalars(left: any, right: any) {
-    const result = unionOfArrays([left], [right]);
+    console.log("unionOfScalars", { left, right });
+    const result = unionOfArrays(
+      coerceMismatchedValueToArray(left),
+      coerceMismatchedValueToArray(right)
+    );
     return result.length === 1 ? result[0] : result;
   }
 
