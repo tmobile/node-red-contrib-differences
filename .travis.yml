@@ -20,9 +20,9 @@ jobs:
     script: npm run test && npm run build
     deploy:
       provider: npm
-      email: OpenDevWG@t-mobile.com
+      email: OpenDevWG-Bot@t-mobile.com
       api_key:
-        secure: PYnLnG0agI6T/Mv3qkr9V/Ryp/ytry27fHDuQnPhyKrOfKb9mo6ohNRUciFW3GEs53rmxkZ6xp/vDKTe5+OVxAd0XOTJJKb9KHosSgnD8Lv2rVUfoyckYhzyCsMoDM5zehJAbNWtczI69uxLF4GoVqsCi88+/7m+R8MUbdH9ZM1uWeo/JzAcKet8dVmoH9ucEvKsGE52BMqKkhdZxINdMZkVOd3HhVSdaClRRbGJPqFZiA4e3eWSnPGL0ZcvgOPenI1O5hiQN7BlXhZH6zZI1iZgOSWSYvnHwBK74nl+6FqXq+ssuiiN9+ILA+hwgb+Z3s0a8SJCZrGb4HUphk3O30Za/5K54iHE8QtM3JKuiCTG7HBjF2UYN21FBYzeYtA83OIdZA16Vpz+pHeHAnk3rsc39KVlaO7Ec2ZPUQRoFkGwAVwkUpdI8y4KbmwYjad/BbrsbaVQcjTlIg0cYPcIgD6nWXG+W5c2virpFT+b0JJQIJB3hh3qcAKZqwQvo6YV++3g9DLaBzSx4vpjhdjdd+rEvLAJjnyrucwZSpDaipAeB5kic9rLi/Mq9W+dmWWSlJ/OQcDmRLCoeU4FDnL+eHb3RMZ6aB11oTwxasVfvGrKMGdSYMGgREne/+xZV4NhbK3HgC+wEIRzh+Duy+fXGVaiuZsjX3IW4V2OUugSBVc=
+        secure: jIJsCrxJv1JLIdP6qJsBNZU8F6sg29/eoVpiJiY+5U+I/DhH2Vy1+XTPrNAdCCrTnzHzLzSZrVqf75kyD3J+K3gPFdeu8y6hCvsj8/Kd1APrzhDXLED+uwEfUhWUfUK6cNPfCmFe+p9ssKpuZayBiDnNaj3SgkFPBXiMnb1aP6Kh6MVC7H80S5/fTND9SEZcAqi5vZ/n3kF0HW2DZVo4hmlfoxnpQit7o093mc8r5wiO7QhOmJXDZXQa0d8I7hYJ1Q8QiLcuX2HHQPsMXd1OdIM3KEE+JeF5uGP4YsMxUaielypIwkK/U4O+376x7Hsb5BR5zpEgWr4bziTnQytq6gnEDaQwjEO/JrCrwu64lhnEAcozhV9Smj7mw0V3qnlTMlJ4tVXpYp1fHn7YjZuDFuv2sfQsAqXtvIF5967A2uuanJHO0UPsG8rrffJxpv63bYna/JTxvg2nZdEZqRffuEx/1LUb7SuzQ5Wlq30P3ArzOMVysU3WgvLBcOAMHmzAkS6+lvnTDAsISFD7jh0isb+Y42TG6YzpGbEfkH544a7huoQbQt/L4eCbMEZ+/vmoCRUbcL3MiLWYxfU9seCtjCp+l9s/ozusai6+DbZgy8gYoZbaSXCF4AAM3KN5VZ5Za1yPrOEbgoJg0UF+LTluxCI1Fmr3ULkV8nCkz63Rzm0=
       on:
         tags: true
       skip_cleanup: true
